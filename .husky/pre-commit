@@ -1,12 +1,17 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-echo "🔍 commit 이전에 lint 규칙을 적용합니다..."
+echo "🔍 commit 이전에 lint 규칙을 적용하고 빌드합니다..."
 
-if npx lint-staged; then
-  echo "✅ 모든 lint 규칙이 성공적으로 적용되었습니다."
-  exit 0
-else
+if ! npx lint-staged; then
   echo "❌ lint 규칙 검사에서 오류가 발생했습니다."
   exit 1
 fi
+
+if ! npm run build; then
+  echo "❌ 빌드 실패"
+  exit 1
+fi
+
+echo "✅ 모든 검사가 성공적으로 완료되었습니다."
+exit 0
