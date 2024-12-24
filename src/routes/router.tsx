@@ -1,5 +1,5 @@
 import DefaultLayout from '@/layout/DefaultLayout'
-import Home from '@/pages/home'
+import Home from '@/pages/Home'
 import Movies from '@/pages/movies'
 import Series from '@/pages/series'
 import SignIn from '@/pages/signin'
