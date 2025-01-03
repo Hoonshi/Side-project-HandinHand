@@ -5,6 +5,7 @@ import { Button, Input, Profile } from '@/components'
 export default function MovieDetails() {
   return (
     <S.Container>
+      <Header $backgroundColor="black" />
       {/* 첫번째 박스 */}
       <S.MovieHeaderContainer>
         <S.MovieInfo>
