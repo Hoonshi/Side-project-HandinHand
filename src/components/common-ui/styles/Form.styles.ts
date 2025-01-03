@@ -53,3 +53,15 @@ export const SuccessMessage = styled(BaseMessage)`
 export const SubmitButton = styled(Button)`
   width: 100%;
 `
+
+export const ToOtherPageText = styled.a`
+  margin-top: var(--space-medium);
+  display: block;
+  color: var(--color-text-gray);
+  text-decoration: underline;
+  transition: color 0.3s;
+
+  &:hover {
+    color: var(--color-white);
+  }
+`

@@ -8,7 +8,8 @@ import {
   FormInput,
   ErrorMessage,
   SuccessMessage,
-  SubmitButton
+  SubmitButton,
+  ToOtherPageText
 } from '../common-ui/styles/Form.styles'
 
 export const SignUpFormContainer = FormContainer
@@ -23,5 +24,6 @@ export {
   FormInput,
   ErrorMessage,
   SuccessMessage,
-  SubmitButton
+  SubmitButton,
+  ToOtherPageText
 }

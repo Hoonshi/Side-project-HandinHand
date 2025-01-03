@@ -11,26 +11,29 @@ export type Database = {
     Tables: {
       comments: {
         Row: {
+          comment: string | null
           comment_id: string
-          content: string | null
           created_at: string
           movie_id: string
+          rating: number | null
           updated_at: string
           user_id: string
         }
         Insert: {
+          comment?: string | null
           comment_id?: string
-          content?: string | null
           created_at?: string
           movie_id: string
+          rating?: number | null
           updated_at?: string
           user_id: string
         }
         Update: {
+          comment?: string | null
           comment_id?: string
-          content?: string | null
           created_at?: string
           movie_id?: string
+          rating?: number | null
           updated_at?: string
           user_id?: string
         }
@@ -77,24 +80,24 @@ export type Database = {
         Row: {
           created_at: string
           email: string
-          nickname: string
-          profile_picture_path: string
+          nickname: string | null
+          profile_picture_path: string | null
           updated_at: string
           user_id: string
         }
         Insert: {
           created_at?: string
           email: string
-          nickname: string
-          profile_picture_path?: string
+          nickname?: string | null
+          profile_picture_path?: string | null
           updated_at?: string
           user_id: string
         }
         Update: {
           created_at?: string
           email?: string
-          nickname?: string
-          profile_picture_path?: string
+          nickname?: string | null
+          profile_picture_path?: string | null
           updated_at?: string
           user_id?: string
         }

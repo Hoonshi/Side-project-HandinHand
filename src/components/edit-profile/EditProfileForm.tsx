@@ -1,5 +1,5 @@
 import * as S from './EditProfileForm.styles'
-import { useRef, useState, useCallback } from 'react'
+import { useRef, useState, useCallback, useMemo } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
@@ -7,11 +7,12 @@ import {
   editProfileSchema,
   TEditProfileFormValues
 } from '@/schemas/user/editProfileSchema'
-import { useCheckDuplicate } from '@/hooks/queries/useCheckDuplicate'
+import { useCheckDuplicate } from '@/hooks/useCheckDuplicate'
 import { useEditProfile } from '@/hooks/mutations/useEditProfile'
 import { useDeactivateAccount } from '@/hooks/mutations/usedeactivateAccount'
 import { useUserStore } from '@/stores/userStore'
 import { Button } from '@/components'
+import { DEFAULT_PROFILE_PATH } from '@/constants/user'
 
 export const EditProfileForm = () => {
   const { user } = useUserStore()
@@ -22,7 +23,7 @@ export const EditProfileForm = () => {
   // 사집 업로드
   const imgRef = useRef<HTMLInputElement>(null)
   const [imgPreview, setImgPreview] = useState<string>(
-    user?.profilePicturePath ?? ''
+    user?.profilePicturePath ?? DEFAULT_PROFILE_PATH
   )
 
   // 중복 확인 해야하는 필드 valid 여부
@@ -34,6 +35,9 @@ export const EditProfileForm = () => {
     formState: { isSubmitting, errors, touchedFields },
     setValue,
     setError,
+    clearErrors,
+    getValues,
+    trigger,
     reset,
     watch // 디버깅용
   } = useForm<TEditProfileFormValues>({
@@ -61,15 +65,16 @@ export const EditProfileForm = () => {
   }
 
   // 닉네임 중복 체크
-  const nicknameValue = watch('nickname')
-
-  const { checkDuplicate: checkNickname } = useCheckDuplicate(
-    'nickname',
-    nicknameValue ?? ''
-  )
+  const { checkDuplicate: checkNickname } = useCheckDuplicate()
 
   const checkDuplicateNickname = useCallback(async () => {
-    const result = await checkNickname()
+    const currNickname = getValues('nickname') // 중복 확인 버튼 클릭시점에 가져온 값
+    if (!currNickname || currNickname === user?.nickname) {
+      return setError('nickname', { message: '현재 닉네임과 동일합니다' })
+    }
+
+    const result = await checkNickname('nickname', currNickname)
+
     if (result.data) {
       setError('nickname', {
         message: '이미 사용 중인 닉네임입니다'
@@ -78,7 +83,7 @@ export const EditProfileForm = () => {
     } else {
       setValidNickname(true)
     }
-  }, [checkNickname, setError])
+  }, [setError, user?.nickname])
 
   // 폼 제출 핸들러
   const onSubmit: SubmitHandler<TEditProfileFormValues> = async formData => {
@@ -93,14 +98,21 @@ export const EditProfileForm = () => {
 
   // 변경 사항 유무 추적
   const formData = watch()
-  const isFormChanged =
-    JSON.stringify(formData) !==
-    JSON.stringify({
+  const isFormChanged = useMemo(() => {
+    const defaultValues = {
       nickname: user?.nickname,
       password: '',
       confirmPassword: '',
       profilePicturePath: user?.profilePicturePath
-    })
+    }
+
+    return (
+      formData.nickname !== defaultValues.nickname ||
+      (formData.password ?? '') !== defaultValues.password ||
+      (formData.confirmPassword ?? '') !== defaultValues.confirmPassword ||
+      formData.profilePicturePath !== defaultValues.profilePicturePath
+    )
+  }, [formData, user])
 
   // 변경 사항 되돌리기
   const handleCancel = () => {
@@ -169,7 +181,9 @@ export const EditProfileForm = () => {
   // 디버깅용
   console.log('current edit profile form', {
     errors: errors,
-    data: watch()
+    data: watch(),
+    validNickname: validNickname,
+    isFormChanged
   })
 
   return (
@@ -179,6 +193,9 @@ export const EditProfileForm = () => {
         <S.ProfileImg
           src={imgPreview ?? user?.profilePicturePath}
           alt="profileImg"
+          onError={e => {
+            e.currentTarget.src = DEFAULT_PROFILE_PATH // 폴백 이미지
+          }}
         />
         <S.PictureInput
           type="file"
@@ -213,8 +230,8 @@ export const EditProfileForm = () => {
             <Button
               type="button"
               color="transparent"
-              disabled={!nicknameValue}
-              onClick={() => checkDuplicateNickname()}>
+              disabled={!getValues('nickname')}
+              onClick={checkDuplicateNickname}>
               중복 확인
             </Button>
           </S.InputwithDuplicateBtn>
@@ -229,7 +246,20 @@ export const EditProfileForm = () => {
           <S.FormInput
             type="password"
             id="password"
-            {...register('password')}
+            {...register('password', {
+              onChange: e => {
+                const value = e.target.value
+                if (!value) {
+                  setValue('password', undefined, { shouldValidate: false })
+                  setValue('confirmPassword', undefined, {
+                    shouldValidate: false
+                  })
+                  clearErrors(['password', 'confirmPassword'])
+                } else {
+                  trigger(['password', 'confirmPassword'])
+                }
+              }
+            })}
             placeholder="비밀번호를 입력해주세요 (6자 이상)"
             error={touchedFields.password && !!errors.password}
           />
@@ -265,8 +295,7 @@ export const EditProfileForm = () => {
               !isFormChanged ||
               isSubmitting ||
               Object.keys(errors).length > 0 ||
-              isEditProfilePending ||
-              !validNickname
+              isEditProfilePending
             }>
             {isEditProfilePending ? '저장 중...' : '변경 저장'}
           </S.SubmitButton>

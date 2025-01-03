@@ -1,0 +1,80 @@
+@font-face {
+  font-family: 'Pretendard';
+  font-style: normal;
+  font-weight: 100;
+  src:
+    url('/assets/fonts/wotf2/Pretendard-Thin.woff2') format('woff2'),
+    url('/assets/fonts/wotf/Pretendard-Thin.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  font-style: normal;
+  font-weight: 200;
+  src:
+    url('/assets/fonts/wotf2/Pretendard-ExtraLight.woff2') format('woff2'),
+    url('/assets/fonts/wotf/Pretendard-ExtraLight.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  font-style: normal;
+  font-weight: 300;
+  src:
+    url('/assets/fonts/wotf2/Pretendard-Light.woff2') format('woff2'),
+    url('/assets/fonts/wotf/Pretendard-Light.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  font-style: normal;
+  font-weight: 400;
+  src:
+    url('/assets/fonts/wotf2/Pretendard-Regular.woff2') format('woff2'),
+    url('/assets/fonts/Pretendard-Regular.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  font-style: normal;
+  font-weight: 500;
+  src:
+    url('/assets/fonts/wotf2/Pretendard-Medium.woff2') format('woff2'),
+    url('/assets/fonts/wotf/Pretendard-Medium.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  font-style: normal;
+  font-weight: 600;
+  src:
+    url('/assets/fonts/wotf2/Pretendard-SemiBold.woff2') format('woff2'),
+    url('/assets/fonts/wotf/Pretendard-SemiBold.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  font-style: normal;
+  font-weight: 700;
+  src:
+    url('/assets/fonts/wotf2/Pretendard-Bold.woff2') format('woff2'),
+    url('/assets/fonts/wotf/Pretendard-Bold.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  font-style: normal;
+  font-weight: 800;
+  src:
+    url('/assets/fonts/wotf2/Pretendard-ExtraBold.woff2') format('woff2'),
+    url('/assets/fonts/wotf/Pretendard-ExtraBold.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  font-style: normal;
+  font-weight: 900;
+  src:
+    url('/assets/fonts/wotf2/Pretendard-Black.woff2') format('woff2'),
+    url('/assets/fonts/wotf/Pretendard-Black.woff') format('woff');
+}

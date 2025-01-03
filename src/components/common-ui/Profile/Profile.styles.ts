@@ -6,6 +6,8 @@ export const ProfileButtonWrapper = styled.button<{ size?: ProfileButtonSize }>`
   border: none;
   padding: 0;
   cursor: pointer;
+  display: flex;
+  align-items: center;
   width: ${({ size }) => {
     if (size === 'small') return '40px'
     if (size === 'medium') return '65px'

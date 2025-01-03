@@ -78,6 +78,8 @@ export const AuthContainer = styled.div`
 
 const iconStyles = css<HeaderIconProps>`
   font-size: var(--font-large);
+  display: flex;
+  align-items: center;
   color: ${({ $active }) =>
     $active ? 'var(--color-white)' : 'var(--color-light-gray)'};
   cursor: pointer;

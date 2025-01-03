@@ -1,5 +1,6 @@
 import * as S from './NotFound.styles'
 import { useNavigate } from 'react-router-dom'
+import { Button } from '@/components'
 
 export const NotFound = () => {
   const navigate = useNavigate()
@@ -17,7 +18,13 @@ export const NotFound = () => {
           <br />
           요청하신 페이지의 주소가 변경 혹은 삭제되어 찾을 수 없습니다.
         </S.Description>
-        <button onClick={handleToHome}>홈으로</button>
+        <Button
+          type="button"
+          color="transparent"
+          size="small"
+          onClick={handleToHome}>
+          홈으로
+        </Button>
       </S.Inner>
     </S.NotFoundContainer>
   )

@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { signUpSchema, TSignUpFormValues } from '@/schemas/user/signUpSchema'
-import { useCheckDuplicate } from '@/hooks/queries/useCheckDuplicate'
+import { useCheckDuplicate } from '@/hooks/useCheckDuplicate'
 import { useSignUp } from '@/hooks/mutations/useSignUp'
 import { Button } from '@/components'
 
@@ -20,6 +20,7 @@ export const SignUpForm = () => {
     trigger,
     formState: { isSubmitting, errors, touchedFields },
     setError,
+    getValues,
     watch // 디버깅용
   } = useForm<TSignUpFormValues>({
     resolver: zodResolver(signUpSchema),
@@ -45,20 +46,16 @@ export const SignUpForm = () => {
   }, [trigger])
 
   // 닉네임, 이메일 중복 체크
-  const nicknameValue = watch('nickname')
-  const emailValue = watch('email')
-
-  const { checkDuplicate: checkNickname } = useCheckDuplicate(
-    'nickname',
-    nicknameValue
-  )
-  const { checkDuplicate: checkEmail } = useCheckDuplicate('email', emailValue)
+  const { checkDuplicate } = useCheckDuplicate()
 
   const checkDuplicateNicknameOrEmail = useCallback(
     async (field: 'nickname' | 'email') => {
+      const currNickname = getValues('nickname')
+      const currEmail = getValues('email')
+
       const result = await (field === 'nickname'
-        ? checkNickname()
-        : checkEmail())
+        ? checkDuplicate('nickname', currNickname)
+        : checkDuplicate('email', currEmail))
       if (result.data) {
         setError(field, {
           message:
@@ -71,7 +68,7 @@ export const SignUpForm = () => {
         setValidFields(prev => ({ ...prev, [field]: true }))
       }
     },
-    [checkNickname, checkEmail, setError]
+    [setError]
   )
 
   // 폼 제출 핸들러
@@ -105,7 +102,7 @@ export const SignUpForm = () => {
               type="button"
               color="transparent"
               size="small"
-              disabled={!nicknameValue}
+              disabled={!getValues('nickname')}
               onClick={() => checkDuplicateNicknameOrEmail('nickname')}>
               중복 확인
             </Button>
@@ -133,7 +130,7 @@ export const SignUpForm = () => {
               type="button"
               color="transparent"
               size="small"
-              disabled={!emailValue}
+              disabled={!getValues('email')}
               onClick={() => checkDuplicateNicknameOrEmail('email')}>
               중복 확인
             </Button>
@@ -181,6 +178,9 @@ export const SignUpForm = () => {
           }>
           {isPending ? '가입 중...' : '가입하기'}
         </S.SubmitButton>
+        <S.ToOtherPageText href="/signin">
+          회원가입이 되어 있으신가요?
+        </S.ToOtherPageText>
       </S.SignUpForm>
     </S.SignUpFormContainer>
   )

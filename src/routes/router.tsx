@@ -59,6 +59,10 @@ const router = createBrowserRouter([
         )
       },
       {
+        path: '/auth/callback',
+        element: <HomePage />
+      },
+      {
         path: '/movies',
         element: (
           <ProtectedRoute>

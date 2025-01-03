@@ -1,5 +1,6 @@
-import { ProfileButtonProps } from '@/types/profile'
 import * as S from './Profile.styles'
+import { ProfileButtonProps } from '@/types/profile'
+import { DEFAULT_PROFILE_PATH } from '@/constants/user'
 
 /* 사용예시 
       <Profile
@@ -28,8 +29,11 @@ export const Profile = ({
       onClick={onClick}
       size={size}>
       <S.ProfileImage
-        src={imageUrl}
+        src={imageUrl ?? DEFAULT_PROFILE_PATH}
         alt={altText}
+        onError={e => {
+          e.currentTarget.src = DEFAULT_PROFILE_PATH // 폴백 이미지
+        }}
       />
     </S.ProfileButtonWrapper>
   )

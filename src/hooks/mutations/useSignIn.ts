@@ -11,14 +11,12 @@ export const useSignIn = (setError: UseFormSetError<TSignInFormValues>) => {
   const { mutateAsync: signIn, isPending } = useMutation({
     mutationFn: async ({ email, password }: TSignInFormValues) => {
       // Supabase 로그인
-      const { data, error } = await supabase.auth.signInWithPassword({
+      const { error } = await supabase.auth.signInWithPassword({
         email,
         password
       })
 
       if (error) throw error
-
-      return data // 성공시 데이터 반환
     },
     onError: error => {
       if (isApiError(error) && error.status >= 400 && error.status < 500) {
